@@ -37,13 +37,13 @@ const getStreakActors = `SELECT MIN(created_at) start
 , COUNT(*) total
 FROM 
 ( SELECT l.*
-       , CASE WHEN @prevx > timestamp - INTERVAL 60 SECOND THEN @ix:=@ix+1 ELSE @ix:=1 END i
+       , CASE WHEN @prevx > created_at - INTERVAL 3600 SECOND THEN @ix:=@ix+1 ELSE @ix:=1 END i
        , CASE WHEN @ix=1 THEN @jx:=@jx+1 ELSE @jx:=@jx END j
-       , @prevx := timestamp
+       , @prevx := created_at
     FROM events l
        , (SELECT @prevx:=null,@ix:=1,@jx:=0) vars
    ORDER  
-      BY l.timestamp
+      BY l.created_at
 ) x
 GROUP 
 BY j
