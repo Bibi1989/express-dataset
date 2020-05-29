@@ -1,17 +1,32 @@
 const db = require("../database/index");
+const dbQueris = require("../database/queries");
 
-const getAllActors = async (res) => {
-  var sql = "select * from events";
-  var params = [];
-  db.all(sql, params, (err, rows) => {
+const getAllActors = (req, res) => {
+  db.all(dbQueris.actorsByTotalEventsQuery, [], (err, result) => {
     if (err) {
-      res.json({ error: err.message });
+      res.status(400).json({ error: err.message });
+    } else if (!null && result.length > 0) {
+      res.status(200).json({ data: result });
+    } else {
+      res.status(400).json({ error: "No actor found!!!" });
     }
-    res.json({ data: rows });
   });
 };
 
-const updateActor = () => {};
+const updateActor = (req, res) => {
+  const { actor_id } = req.body;
+  let params = [req.body.avatar_url, actor_id];
+  db.run(dbQueris.updateActorLoginField, params, function (err) {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    if (this.lastID) {
+      return res.status(200).json({ message: "Updated successfully!!!" });
+    } else {
+      return res.status(404).json({ error: "Not found" });
+    }
+  });
+};
 
 const getStreak = () => {};
 

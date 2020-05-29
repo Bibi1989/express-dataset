@@ -2,15 +2,13 @@ const express = require("express");
 const router = express.Router();
 const addEvent = require("../controllers/events").addEvent;
 const getAllEvents = require("../controllers/events").getAllEvents;
+const getByActor = require("../controllers/events").getByActor;
 
 // Routes related to event
-router.get("/", (req, res) => {
-  getAllEvents(res);
-});
+router.get("/", getAllEvents);
 
-router.post("/", async (req, res) => {
-  const event = await addEvent(req.body);
-  res.json({ event });
-});
+router.get("/actors/:actor_id", getByActor);
+
+router.post("/", addEvent);
 
 module.exports = router;

@@ -5,7 +5,7 @@ const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
-const db = require("./database");
+const db = require("./database/");
 
 const index = require("./routes/index");
 const eraseEvents = require("./routes/eraseEvents");

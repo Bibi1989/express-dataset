@@ -8,6 +8,7 @@ var app = require("../app");
 var debug = require("debug")("GithubDatasetAPI:server");
 var http = require("http");
 const db = require("../database/index");
+const dbQueries = require("../database/queries");
 
 /**
  * Get port from environment and store in Express.
@@ -86,11 +87,17 @@ function onListening() {
   debug("Listening on " + bind);
 }
 
+// db.serialize(function () {
+//   // These two queries will run sequentially.
+//   db.run(
+//     "CREATE TABLE IF NOT EXISTS events (id, type, actor_id, repo_id, created_at)"
+//   );
+//   db.run("CREATE TABLE IF NOT EXISTS actors (id, login, avatar_url)");
+//   db.run("CREATE TABLE IF NOT EXISTS repos (id, name, url)");
+// });
+
 db.serialize(function () {
-  // These two queries will run sequentially.
-  db.run(
-    "CREATE TABLE IF NOT EXISTS events (id, type, actor_id, repo_id, created_at)"
-  );
-  db.run("CREATE TABLE IF NOT EXISTS actors (id, login, avatar_url)");
-  db.run("CREATE TABLE IF NOT EXISTS repos (id, name, url)");
+  db.run(dbQueries.createRepoTable);
+  db.run(dbQueries.createActorTable);
+  db.run(dbQueries.createEventTable);
 });
