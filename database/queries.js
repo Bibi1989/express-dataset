@@ -28,8 +28,9 @@ const createRepoTable = `
 
 const eraseAllEvents = `DELETE FROM events`;
 
-const getAllEventsAscEventId = `SELECT * FROM events JOIN actors ON events.actor_id=actors.id JOIN repos ON events.repo_id=repos.id`;
-// const getAllEventsAscEventId = `SELECT * FROM events ORDER BY id ASC`;
+const getAllEventsAscEventId = `SELECT * FROM ((events INNER JOIN actors ON events.actor_id=actors.id) INNER JOIN repos ON events.repo_id=repos.id) ORDER BY id`;
+
+const getEventByActorId = `SELECT * FROM events WHERE actor_id=? ORDER BY id ASC`;
 
 const updateActorLoginField = `UPDATE actors SET avatar_url=COALESCE(?,avatar_url) WHERE id=?`;
 
@@ -60,6 +61,7 @@ module.exports = {
   eraseAllEvents,
   getAllEventsAscEventId,
   updateActorLoginField,
+  getEventByActorId,
   createRepoQuery,
   createActorQuery,
   createEventQuery,
