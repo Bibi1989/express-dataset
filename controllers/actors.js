@@ -6,7 +6,7 @@ const getAllActors = (req, res) => {
     if (err) {
       res.status(400).json({ error: err.message });
     } else if (!null && result.length > 0) {
-      res.status(200).json({ data: result });
+      res.status(200).json(result);
     } else {
       res.status(400).json({ error: "No actor found!!!" });
     }
@@ -28,7 +28,14 @@ const updateActor = (req, res) => {
   });
 };
 
-const getStreak = () => {};
+const getStreak = (req, res) => {
+  db.all(dbQueris.getStreakActors, [], (err) => {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    return res.json(row);
+  });
+};
 
 module.exports = {
   updateActor: updateActor,

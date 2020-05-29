@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 const getAllActors = require("../controllers/actors").getAllActors;
 const updateActor = require("../controllers/actors").updateActor;
+const getStreak = require("../controllers/actors").getStreak;
 
 // Routes related to actor.
 
 router.get("/", getAllActors);
-// router.get("/", (req, res) => {
-//   getAllActors(res);
-// });
+
+router.get("/streak", getStreak);
 
 router.put("/", updateActor);
 

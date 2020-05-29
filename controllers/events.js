@@ -4,10 +4,8 @@ const dbQueries = require("../database/queries");
 const getAllEvents = (req, res) => {
   db.all(dbQueries.getAllEventsAscEventId, (err, result) => {
     if (err) {
-      res.status(400).json({ error: err.message });
-      return;
+      return res.status(400).json({ error: err.message });
     }
-    console.log(result);
     const resultObject = result.map((r) => ({
       id: r.id,
       type: r.type,
@@ -23,7 +21,7 @@ const getAllEvents = (req, res) => {
       },
       created_at: r.created_at,
     }));
-    res.status(200).json({ data: resultObject });
+    res.status(200).json(resultObject);
   });
 };
 
@@ -88,14 +86,29 @@ const addEvent = (req, res) => {
 
 const getByActor = (req, res) => {
   const params = [Number(req.params.actor_id)];
-  db.all(dbQueries.getEventByActorId, params, (err, row) => {
+  db.all(dbQueries.getEventByActorId, params, (err, rows) => {
     if (err) {
       res.status(404).json({ error: err.message });
     }
-    if (row.length < 1) {
+    if (rows.length < 1) {
       res.status(404).json({});
     }
-    res.status(200).json({ data: row });
+    const rowObject = rows.map((r) => ({
+      id: r.id,
+      type: r.type,
+      actor: {
+        id: r.actor_id,
+        login: r.login,
+        avatar_url: r.avatar_url,
+      },
+      repo: {
+        id: r.repo_id,
+        name: r.name,
+        url: r.url,
+      },
+      created_at: r.created_at,
+    }));
+    res.status(200).json(rowObject);
   });
 };
 
