@@ -32,22 +32,8 @@ const getAllEventsAscEventId = `SELECT * FROM events INNER JOIN actors ON events
 
 const getEventByActorId = `SELECT * FROM events INNER JOIN actors ON events.actor_id=actors.id INNER JOIN repos ON events.repo_id=repos.id WHERE actor_id=? ORDER BY id ASC`;
 
-const getStreakActors = `SELECT MIN(created_at) start
-, MAX(created_at) end
-, COUNT(*) total
-FROM 
-( SELECT l.*
-       , CASE WHEN @prevx > created_at - INTERVAL 3600 SECOND THEN @ix:=@ix+1 ELSE @ix:=1 END i
-       , CASE WHEN @ix=1 THEN @jx:=@jx+1 ELSE @jx:=@jx END j
-       , @prevx := created_at
-    FROM events l
-       , (SELECT @prevx:=null,@ix:=1,@jx:=0) vars
-   ORDER  
-      BY l.created_at
-) x
-GROUP 
-BY j
-;`;
+const getStreakActors = `SELECT MAX(events.created_at) as date, actors.login, actors.id, actors.avatar_url FROM events INNER JOIN actors ON events.actor_id = actors.id GROUP BY actors.login ORDER BY date DESC
+`;
 
 const updateActorLoginField = `UPDATE actors SET avatar_url=COALESCE(?,avatar_url) WHERE id=?`;
 

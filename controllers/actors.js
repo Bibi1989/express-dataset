@@ -29,7 +29,7 @@ const updateActor = (req, res) => {
 };
 
 const getStreak = (req, res) => {
-  db.all(dbQueris.getStreakActors, [], (err) => {
+  db.all(dbQueris.getStreakActors, [], (err, row) => {
     if (err) {
       return res.status(400).json({ error: err.message });
     }

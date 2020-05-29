@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "prestart": "yarn install",
+    "prestart": "yarn",
     "start": "nodemon ./bin/www",
-    "pretest": "yarn install",
+    "pretest": "yarn",
     "test": "./node_modules/.bin/mocha test"
   },
   "dependencies": {
